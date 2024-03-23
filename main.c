@@ -1,14 +1,8 @@
 #define TEST_IMPLEMENTATION
 #include "test.h"
 
-#include "deque.h"
-
 // Напишите функцию, выполняющую вспомогательную процедуру
-// над Вашей структурой данных. Список аргументов и возвращаемый
-// тип можно изменять как Вам удобно по заданию
-static void custom_action(...) {
-
-}
+// над Вашей структурой данных
 
 // Напишите тест для вспомогательной процедуры внутри
 TEST(action) {
@@ -184,7 +178,6 @@ TEST(action) {
 
         stack_sort(stack);
 
-    #if 1
         stack_push(stack, 'f');
         stack_push(stack, 'g');
         stack_push(stack, 'd');
@@ -193,16 +186,6 @@ TEST(action) {
         stack_push(stack, 'c');
         stack_push(stack, 'a');
         stack_push(stack, 'e');
-    #else
-        stack_push(stack, 'a');
-        stack_push(stack, 'b');
-        stack_push(stack, 'c');
-        stack_push(stack, 'd');
-        stack_push(stack, 'e');
-        stack_push(stack, 'f');
-        stack_push(stack, 'g');
-        stack_push(stack, 'h');
-    #endif
 
         stack_sort(stack);
 
@@ -391,7 +374,6 @@ TEST(action) {
 
         queue_sort(queue);
 
-    #if 1
         queue_push(queue, 'f');
         queue_push(queue, 'g');
         queue_push(queue, 'd');
@@ -400,16 +382,6 @@ TEST(action) {
         queue_push(queue, 'c');
         queue_push(queue, 'a');
         queue_push(queue, 'e');
-    #else
-        queue_push(queue, 'a');
-        queue_push(queue, 'b');
-        queue_push(queue, 'c');
-        queue_push(queue, 'd');
-        queue_push(queue, 'e');
-        queue_push(queue, 'f');
-        queue_push(queue, 'g');
-        queue_push(queue, 'h');
-    #endif
 
         queue_sort(queue);
 
@@ -689,7 +661,6 @@ TEST(action) {
 
         deque_sort(deque);
 
-    #if 1
         deque_push_front(deque, 'f');
         deque_push_back(deque, 'g');
         deque_push_front(deque, 'd');
@@ -698,16 +669,6 @@ TEST(action) {
         deque_push_back(deque, 'c');
         deque_push_front(deque, 'a');
         deque_push_back(deque, 'e');
-    #else
-        deque_push_back(deque, 'a');
-        deque_push_back(deque, 'b');
-        deque_push_back(deque, 'c');
-        deque_push_back(deque, 'd');
-        deque_push_back(deque, 'e');
-        deque_push_back(deque, 'f');
-        deque_push_back(deque, 'g');
-        deque_push_back(deque, 'h');
-    #endif
 
         deque_sort(deque);
 
