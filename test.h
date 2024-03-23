@@ -6,11 +6,14 @@
 
 #define TEST(NAME) static void NAME(bool* test__result)
 
+#define TEST_LOGF(FORMAT, ...) fprintf(stderr, FORMAT, __VA_ARGS__)
+#define TEST_LOG(MSG) fputs(MSG, stderr)
+
 #define TEST_ASSERT(EXPR) do { \
     if (!(EXPR)) { \
         if (*test__result) \
-            fprintf(stderr, "#%d: %s failed:\n", test__total, __FUNCTION__); \
-        fprintf(stderr, "\t%s:%d: %s\n", __FILE__, __LINE__, #EXPR); \
+            TEST_LOGF("#%d: %s failed:\n", test__total, __FUNCTION__); \
+        TEST_LOGF("\t%s:%d: %s\n", __FILE__, __LINE__, #EXPR); \
         *test__result = false; \
     } \
 } while (0)
@@ -40,10 +43,10 @@ int test_run(const test_fn tests[])
     }
 
     if (test__passed != test__total) {
-        fprintf(stderr, "\n○ %d/%d tests passed\n", test__passed, test__total);
+        TEST_LOGF("\n○ %d/%d tests passed\n", test__passed, test__total);
         return 1;
     } else {
-        fprintf(stderr, "\n◉ All tests passed!\n");
+        TEST_LOG("\n◉ All tests passed!\n");
         return 0;
     }
 }
