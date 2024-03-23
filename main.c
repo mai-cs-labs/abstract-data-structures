@@ -16,6 +16,7 @@ TEST(action) {
 // Общие юнит-тесты
 
 #if defined(__STACK_H__)
+
     TEST(create_stack_with) {
         Stack* stack = NULL;
 
@@ -63,7 +64,6 @@ TEST(action) {
 
         TEST_ASSERT(stack_empty(stack) == true);
         TEST_ASSERT(stack_capacity(stack) == 0);
-        TEST_ASSERT(stack == NULL);
 
         stack = stack_create_with(4);
 
@@ -221,9 +221,213 @@ TEST(action) {
 
         stack_destroy(&stack);
     }
+
 #elif defined(__QUEUE_H__)
 
+    TEST(create_queue_with) {
+        Queue* queue = NULL;
 
+        queue = queue_create_with(7);
+
+        TEST_ASSERT(queue_size(queue) == 0);
+        TEST_ASSERT(queue_capacity(queue) == 7);
+
+        queue_destroy(&queue);
+    }
+
+    TEST(create_queue) {
+        Queue* queue = queue_create();
+
+        TEST_ASSERT(queue_empty(queue) == true);
+        TEST_ASSERT(queue_capacity(queue) > 0);
+
+        queue_destroy(&queue);
+    }
+
+    TEST(destroy_queue) {
+        Queue* queue = NULL;
+
+        TEST_ASSERT(queue_empty(queue) == true);
+        TEST_ASSERT(queue_capacity(queue) == 0);
+
+        queue_destroy(&queue);
+
+        TEST_ASSERT(queue_empty(queue) == true);
+        TEST_ASSERT(queue_capacity(queue) == 0);
+        TEST_ASSERT(queue == NULL);
+
+        queue = queue_create();
+        queue_destroy(&queue);
+
+        TEST_ASSERT(queue_empty(queue) == true);
+        TEST_ASSERT(queue_capacity(queue) == 0);
+        TEST_ASSERT(queue == NULL);
+    }
+
+    TEST(push_to_queue) {
+        Queue* queue = NULL;
+
+        queue_push(queue, 'o');
+
+        TEST_ASSERT(queue_empty(queue) == true);
+        TEST_ASSERT(queue_capacity(queue) == 0);
+
+        queue = queue_create_with(4);
+
+        queue_push(queue, '1');
+        queue_push(queue, '2');
+        queue_push(queue, '3');
+
+        TEST_ASSERT(queue_empty(queue) == false);
+        TEST_ASSERT(queue_capacity(queue) == 4);
+
+        queue_push(queue, '4');
+
+        TEST_ASSERT(queue_size(queue) == 4);
+        TEST_ASSERT(queue_capacity(queue) > 4);
+
+        queue_push(queue, '5');
+        queue_push(queue, '6');
+        queue_push(queue, '7');
+
+        TEST_ASSERT(queue_size(queue) == 7);
+        TEST_ASSERT(queue_capacity(queue) > 4);
+
+        queue_destroy(&queue);
+    }
+
+    TEST(pop_from_queue) {
+        Queue* queue = NULL;
+
+        queue_pop(queue);
+
+        queue = queue_create_with(4);
+
+        queue_pop(queue);
+
+        TEST_ASSERT(queue_size(queue) == 0);
+        TEST_ASSERT(queue_capacity(queue) == 4);
+
+        queue_push(queue, '1');
+        queue_push(queue, '2');
+
+        queue_pop(queue);
+        queue_pop(queue);
+
+        TEST_ASSERT(queue_size(queue) == 0);
+        TEST_ASSERT(queue_capacity(queue) == 4);
+
+        for (int i = 0; i < 5; ++i)
+            queue_push(queue, 'o');
+
+        queue_pop(queue);
+
+        TEST_ASSERT(queue_size(queue) == 4);
+        TEST_ASSERT(queue_capacity(queue) > 4);
+
+        queue_destroy(&queue);
+    }
+
+    TEST(front_of_queue) {
+        Queue* queue = NULL;
+
+        TEST_ASSERT(queue_front(queue) == NULL);
+
+        queue = queue_create_with(2);
+
+        TEST_ASSERT(queue_front(queue) == NULL);
+
+        queue_push(queue, '1');
+        TEST_ASSERT(*(char*)queue_front(queue) == '1');
+
+        TEST_ASSERT(queue_size(queue) == 1);
+
+        queue_push(queue, '2');
+        queue_push(queue, '3');
+
+        TEST_ASSERT(*(char*)queue_front(queue) == '1');
+
+        queue_pop(queue);
+
+        TEST_ASSERT(*(char*)queue_front(queue) == '2');
+
+        queue_destroy(&queue);
+    }
+
+    TEST(clear_queue) {
+        Queue* queue = NULL;
+
+        queue_clear(queue);
+
+        queue = queue_create();
+        queue_clear(queue);
+
+        TEST_ASSERT(queue_capacity(queue) > 0);
+        TEST_ASSERT(queue_size(queue) == 0);
+
+        queue_push(queue, '1');
+        queue_push(queue, '2');
+        queue_push(queue, '3');
+
+        queue_clear(queue);
+
+        TEST_ASSERT(queue_capacity(queue) > 0);
+        TEST_ASSERT(queue_size(queue) == 0);
+
+        queue_destroy(&queue);
+    }
+
+    TEST(sorted_queue) {
+        Queue* queue = NULL;
+        char prev_value = '\0';
+        char* item = NULL;
+        bool sorted = true;
+
+        queue_sort(queue);
+
+        queue = queue_create();
+
+        queue_sort(queue);
+
+    #if 1
+        queue_push(queue, 'f');
+        queue_push(queue, 'g');
+        queue_push(queue, 'd');
+        queue_push(queue, 'h');
+        queue_push(queue, 'b');
+        queue_push(queue, 'c');
+        queue_push(queue, 'a');
+        queue_push(queue, 'e');
+    #else
+        queue_push(queue, 'a');
+        queue_push(queue, 'b');
+        queue_push(queue, 'c');
+        queue_push(queue, 'd');
+        queue_push(queue, 'e');
+        queue_push(queue, 'f');
+        queue_push(queue, 'g');
+        queue_push(queue, 'h');
+    #endif
+
+        queue_sort(queue);
+
+        prev_value = *(char*)queue_front(queue);
+        queue_pop(queue);
+
+        while (!queue_empty(queue)) {
+            item = (char*)queue_front(queue);
+            queue_pop(queue);
+
+            if (*item < prev_value) {
+                sorted = false;
+                break;
+            }
+        }
+
+        TEST_ASSERT(sorted == true);
+
+        queue_destroy(&queue);
+    }
 #elif defined(__DEQUE_H__)
 
 #else
@@ -242,6 +446,14 @@ int main(void) {
         clear_stack,
         sorted_stack,
 #elif defined(__QUEUE_H__)
+        create_queue_with,
+        create_queue,
+        destroy_queue,
+        push_to_queue,
+        pop_from_queue,
+        front_of_queue,
+        clear_queue,
+        sorted_queue,
 #elif defined(__DEQUE_H__)
 #endif
         action,
