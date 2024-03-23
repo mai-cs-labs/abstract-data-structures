@@ -1,6 +1,8 @@
 #define TEST_IMPLEMENTATION
 #include "test.h"
 
+#include "deque.h"
+
 // Напишите функцию, выполняющую вспомогательную процедуру
 // над Вашей структурой данных. Список аргументов и возвращаемый
 // тип можно изменять как Вам удобно по заданию
@@ -428,7 +430,304 @@ TEST(action) {
 
         queue_destroy(&queue);
     }
+
 #elif defined(__DEQUE_H__)
+
+    TEST(create_deque_with) {
+        Deque* deque = NULL;
+
+        deque = deque_create_with(7);
+
+        TEST_ASSERT(deque_size(deque) == 0);
+        TEST_ASSERT(deque_capacity(deque) == 7);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(create_deque) {
+        Deque* deque = deque_create();
+
+        TEST_ASSERT(deque_empty(deque) == true);
+        TEST_ASSERT(deque_capacity(deque) > 0);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(destroy_deque) {
+        Deque* deque = NULL;
+
+        TEST_ASSERT(deque_empty(deque) == true);
+        TEST_ASSERT(deque_capacity(deque) == 0);
+
+        deque_destroy(&deque);
+
+        TEST_ASSERT(deque_empty(deque) == true);
+        TEST_ASSERT(deque_capacity(deque) == 0);
+        TEST_ASSERT(deque == NULL);
+
+        deque = deque_create();
+        deque_destroy(&deque);
+
+        TEST_ASSERT(deque_empty(deque) == true);
+        TEST_ASSERT(deque_capacity(deque) == 0);
+        TEST_ASSERT(deque == NULL);
+    }
+
+    TEST(push_to_deque_front) {
+        Deque* deque = NULL;
+
+        deque_push_front(deque, 'o');
+
+        TEST_ASSERT(deque_empty(deque) == true);
+        TEST_ASSERT(deque_capacity(deque) == 0);
+
+        deque = deque_create_with(4);
+
+        deque_push_front(deque, '1');
+        deque_push_front(deque, '2');
+        deque_push_front(deque, '3');
+
+        TEST_ASSERT(deque_empty(deque) == false);
+        TEST_ASSERT(deque_capacity(deque) == 4);
+
+        deque_push_front(deque, '4');
+
+        TEST_ASSERT(deque_size(deque) == 4);
+        TEST_ASSERT(deque_capacity(deque) > 4);
+
+        deque_push_front(deque, '5');
+        deque_push_front(deque, '6');
+        deque_push_front(deque, '7');
+
+        TEST_ASSERT(deque_size(deque) == 7);
+        TEST_ASSERT(deque_capacity(deque) > 4);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(push_to_deque_back) {
+        Deque* deque = NULL;
+
+        deque_push_back(deque, 'o');
+
+        TEST_ASSERT(deque_empty(deque) == true);
+        TEST_ASSERT(deque_capacity(deque) == 0);
+
+        deque = deque_create_with(4);
+
+        deque_push_back(deque, '1');
+        deque_push_back(deque, '2');
+        deque_push_back(deque, '3');
+
+        TEST_ASSERT(deque_empty(deque) == false);
+        TEST_ASSERT(deque_capacity(deque) == 4);
+
+        deque_push_back(deque, '4');
+
+        TEST_ASSERT(deque_size(deque) == 4);
+        TEST_ASSERT(deque_capacity(deque) > 4);
+
+        deque_push_back(deque, '5');
+        deque_push_back(deque, '6');
+        deque_push_back(deque, '7');
+
+        TEST_ASSERT(deque_size(deque) == 7);
+        TEST_ASSERT(deque_capacity(deque) > 4);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(pop_from_deque_front) {
+        Deque* deque = NULL;
+
+        deque_pop_front(deque);
+
+        deque = deque_create_with(4);
+
+        deque_pop_front(deque);
+
+        TEST_ASSERT(deque_size(deque) == 0);
+        TEST_ASSERT(deque_capacity(deque) == 4);
+
+        deque_push_front(deque, '1');
+        deque_push_back(deque, '2');
+
+        deque_pop_front(deque);
+        deque_pop_front(deque);
+
+        TEST_ASSERT(deque_size(deque) == 0);
+        TEST_ASSERT(deque_capacity(deque) == 4);
+
+        for (int i = 0; i < 5; ++i)
+            deque_push_front(deque, 'o');
+
+        deque_pop_front(deque);
+
+        TEST_ASSERT(deque_size(deque) == 4);
+        TEST_ASSERT(deque_capacity(deque) > 4);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(pop_from_deque_back) {
+        Deque* deque = NULL;
+
+        deque_pop_back(deque);
+
+        deque = deque_create_with(4);
+
+        deque_pop_back(deque);
+
+        TEST_ASSERT(deque_size(deque) == 0);
+        TEST_ASSERT(deque_capacity(deque) == 4);
+
+        deque_push_front(deque, '1');
+        deque_push_back(deque, '2');
+
+        deque_pop_back(deque);
+        deque_pop_back(deque);
+
+        TEST_ASSERT(deque_size(deque) == 0);
+        TEST_ASSERT(deque_capacity(deque) == 4);
+
+        for (int i = 0; i < 5; ++i)
+            deque_push_back(deque, 'o');
+
+        deque_pop_back(deque);
+
+        TEST_ASSERT(deque_size(deque) == 4);
+        TEST_ASSERT(deque_capacity(deque) > 4);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(front_of_deque) {
+        Deque* deque = NULL;
+
+        TEST_ASSERT(deque_front(deque) == NULL);
+
+        deque = deque_create_with(2);
+
+        TEST_ASSERT(deque_front(deque) == NULL);
+
+        deque_push_front(deque, '1');
+        TEST_ASSERT(*(char*)deque_front(deque) == '1');
+
+        TEST_ASSERT(deque_size(deque) == 1);
+
+        deque_push_back(deque, '2');
+        deque_push_front(deque, '3');
+
+        TEST_ASSERT(*(char*)deque_front(deque) == '3');
+
+        deque_pop_front(deque);
+
+        TEST_ASSERT(*(char*)deque_front(deque) == '1');
+
+        deque_destroy(&deque);
+    }
+
+    TEST(back_of_deque) {
+        Deque* deque = NULL;
+
+        TEST_ASSERT(deque_front(deque) == NULL);
+
+        deque = deque_create_with(2);
+
+        TEST_ASSERT(deque_front(deque) == NULL);
+
+        deque_push_back(deque, '1');
+        TEST_ASSERT(*(char*)deque_back(deque) == '1');
+
+        TEST_ASSERT(deque_size(deque) == 1);
+
+        deque_push_front(deque, '2');
+        deque_push_back(deque, '3');
+
+        TEST_ASSERT(*(char*)deque_back(deque) == '3');
+
+        deque_pop_back(deque);
+
+        TEST_ASSERT(*(char*)deque_back(deque) == '1');
+
+        deque_destroy(&deque);
+    }
+
+    TEST(clear_deque) {
+        Deque* deque = NULL;
+
+        deque_clear(deque);
+
+        deque = deque_create();
+        deque_clear(deque);
+
+        TEST_ASSERT(deque_capacity(deque) > 0);
+        TEST_ASSERT(deque_size(deque) == 0);
+
+        deque_push_front(deque, '1');
+        deque_push_back(deque, '2');
+        deque_push_front(deque, '3');
+        deque_push_back(deque, '4');
+
+        deque_clear(deque);
+
+        TEST_ASSERT(deque_capacity(deque) > 0);
+        TEST_ASSERT(deque_size(deque) == 0);
+
+        deque_destroy(&deque);
+    }
+
+    TEST(sorted_deque) {
+        Deque* deque = NULL;
+        char prev_value = '\0';
+        char* item = NULL;
+        bool sorted = true;
+
+        deque_sort(deque);
+
+        deque = deque_create();
+
+        deque_sort(deque);
+
+    #if 1
+        deque_push_front(deque, 'f');
+        deque_push_back(deque, 'g');
+        deque_push_front(deque, 'd');
+        deque_push_back(deque, 'h');
+        deque_push_front(deque, 'b');
+        deque_push_back(deque, 'c');
+        deque_push_front(deque, 'a');
+        deque_push_back(deque, 'e');
+    #else
+        deque_push_back(deque, 'a');
+        deque_push_back(deque, 'b');
+        deque_push_back(deque, 'c');
+        deque_push_back(deque, 'd');
+        deque_push_back(deque, 'e');
+        deque_push_back(deque, 'f');
+        deque_push_back(deque, 'g');
+        deque_push_back(deque, 'h');
+    #endif
+
+        deque_sort(deque);
+
+        prev_value = *(char*)deque_back(deque);
+        deque_pop_back(deque);
+
+        while (!deque_empty(deque)) {
+            item = (char*)deque_back(deque);
+            deque_pop_back(deque);
+
+            if (*item > prev_value) {
+                sorted = false;
+                break;
+            }
+        }
+
+        TEST_ASSERT(sorted == true);
+
+        deque_destroy(&deque);
+    }
 
 #else
 #error "You must include one of stack.h, queue.h or deque.h"
@@ -455,6 +754,17 @@ int main(void) {
         clear_queue,
         sorted_queue,
 #elif defined(__DEQUE_H__)
+        create_deque_with,
+        create_deque,
+        destroy_deque,
+        push_to_deque_front,
+        push_to_deque_back,
+        pop_from_deque_front,
+        pop_from_deque_back,
+        front_of_deque,
+        back_of_deque,
+        clear_deque,
+        sorted_deque,
 #endif
         action,
         NULL,
