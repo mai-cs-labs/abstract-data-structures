@@ -15,8 +15,6 @@
     } \
 } while (0)
 
-#define TEST_STATIC_ASSERT(EXPR) static const int static_assert[(EXPR) ? 1 : -1]
-
 typedef void (*test_fn)(bool* test__result);
 
 extern int test__passed;
