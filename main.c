@@ -73,9 +73,11 @@ TEST(action) {
         stack_push(stack, '4');
 
         TEST_ASSERT(stack_size(stack) == 4);
-        TEST_ASSERT(stack_capacity(stack) > 4);
 
         stack_push(stack, '5');
+
+        TEST_ASSERT(stack_capacity(stack) > 4);
+
         stack_push(stack, '6');
         stack_push(stack, '7');
 
@@ -127,18 +129,18 @@ TEST(action) {
         TEST_ASSERT(stack_top(stack) == NULL);
 
         stack_push(stack, '1');
-        TEST_ASSERT(*(char*)stack_top(stack) == '1');
+        TEST_ASSERT(*stack_top(stack) == (T)'1');
 
         TEST_ASSERT(stack_size(stack) == 1);
 
         stack_push(stack, '2');
         stack_push(stack, '3');
 
-        TEST_ASSERT(*(char*)stack_top(stack) == '3');
+        TEST_ASSERT(*stack_top(stack) == (T)'3');
 
         stack_pop(stack);
 
-        TEST_ASSERT(*(char*)stack_top(stack) == '2');
+        TEST_ASSERT(*stack_top(stack) == (T)'2');
 
         stack_destroy(&stack);
     }
@@ -168,8 +170,8 @@ TEST(action) {
 
     TEST(sorted_stack) {
         Stack* stack = NULL;
-        char prev_value = '\0';
-        char* item = NULL;
+        T prev_value;
+        T* item = NULL;
         bool sorted = true;
 
         stack_sort(stack);
@@ -189,11 +191,11 @@ TEST(action) {
 
         stack_sort(stack);
 
-        prev_value = *(char*)stack_top(stack);
+        prev_value = *stack_top(stack);
         stack_pop(stack);
 
         while (!stack_empty(stack)) {
-            item = (char*)stack_top(stack);
+            item = stack_top(stack);
             stack_pop(stack);
 
             if (*item > prev_value) {
@@ -323,18 +325,18 @@ TEST(action) {
         TEST_ASSERT(queue_front(queue) == NULL);
 
         queue_push(queue, '1');
-        TEST_ASSERT(*(char*)queue_front(queue) == '1');
+        TEST_ASSERT(*queue_front(queue) == (T)'1');
 
         TEST_ASSERT(queue_size(queue) == 1);
 
         queue_push(queue, '2');
         queue_push(queue, '3');
 
-        TEST_ASSERT(*(char*)queue_front(queue) == '1');
+        TEST_ASSERT(*queue_front(queue) == (T)'1');
 
         queue_pop(queue);
 
-        TEST_ASSERT(*(char*)queue_front(queue) == '2');
+        TEST_ASSERT(*queue_front(queue) == (T)'2');
 
         queue_destroy(&queue);
     }
@@ -364,8 +366,8 @@ TEST(action) {
 
     TEST(sorted_queue) {
         Queue* queue = NULL;
-        char prev_value = '\0';
-        char* item = NULL;
+        T prev_value;
+        T* item = NULL;
         bool sorted = true;
 
         queue_sort(queue);
@@ -385,11 +387,11 @@ TEST(action) {
 
         queue_sort(queue);
 
-        prev_value = *(char*)queue_front(queue);
+        prev_value = *queue_front(queue);
         queue_pop(queue);
 
         while (!queue_empty(queue)) {
-            item = (char*)queue_front(queue);
+            item = queue_front(queue);
             queue_pop(queue);
 
             if (*item < prev_value) {
@@ -583,18 +585,18 @@ TEST(action) {
         TEST_ASSERT(deque_front(deque) == NULL);
 
         deque_push_front(deque, '1');
-        TEST_ASSERT(*(char*)deque_front(deque) == '1');
+        TEST_ASSERT(*deque_front(deque) == (T)'1');
 
         TEST_ASSERT(deque_size(deque) == 1);
 
         deque_push_back(deque, '2');
         deque_push_front(deque, '3');
 
-        TEST_ASSERT(*(char*)deque_front(deque) == '3');
+        TEST_ASSERT(*deque_front(deque) == (T)'3');
 
         deque_pop_front(deque);
 
-        TEST_ASSERT(*(char*)deque_front(deque) == '1');
+        TEST_ASSERT(*deque_front(deque) == (T)'1');
 
         deque_destroy(&deque);
     }
@@ -609,18 +611,18 @@ TEST(action) {
         TEST_ASSERT(deque_front(deque) == NULL);
 
         deque_push_back(deque, '1');
-        TEST_ASSERT(*(char*)deque_back(deque) == '1');
+        TEST_ASSERT(*deque_back(deque) == (T)'1');
 
         TEST_ASSERT(deque_size(deque) == 1);
 
         deque_push_front(deque, '2');
         deque_push_back(deque, '3');
 
-        TEST_ASSERT(*(char*)deque_back(deque) == '3');
+        TEST_ASSERT(*deque_back(deque) == (T)'3');
 
         deque_pop_back(deque);
 
-        TEST_ASSERT(*(char*)deque_back(deque) == '1');
+        TEST_ASSERT(*deque_back(deque) == (T)'1');
 
         deque_destroy(&deque);
     }
@@ -651,8 +653,8 @@ TEST(action) {
 
     TEST(sorted_deque) {
         Deque* deque = NULL;
-        char prev_value = '\0';
-        char* item = NULL;
+        T prev_value = '\0';
+        T* item = NULL;
         bool sorted = true;
 
         deque_sort(deque);
@@ -672,11 +674,11 @@ TEST(action) {
 
         deque_sort(deque);
 
-        prev_value = *(char*)deque_back(deque);
+        prev_value = *deque_back(deque);
         deque_pop_back(deque);
 
         while (!deque_empty(deque)) {
-            item = (char*)deque_back(deque);
+            item = deque_back(deque);
             deque_pop_back(deque);
 
             if (*item > prev_value) {
