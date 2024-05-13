@@ -202,6 +202,8 @@ TEST(action) {
                 sorted = false;
                 break;
             }
+
+            prev_value = item;
         }
 
         TEST_ASSERT(sorted == true);
@@ -398,6 +400,8 @@ TEST(action) {
                 sorted = false;
                 break;
             }
+
+            prev_value = item;
         }
 
         TEST_ASSERT(sorted == true);
@@ -685,6 +689,8 @@ TEST(action) {
                 sorted = false;
                 break;
             }
+
+            prev_value = item;
         }
 
         TEST_ASSERT(sorted == true);
